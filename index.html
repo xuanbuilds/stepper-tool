@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Stepper Motor Coil Identification Helper</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  #app {
+    max-width: 600px;
+    margin: 40px auto;
+    background-color: #fff;
+    padding: 20px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    border-radius: 8px;
+  }
+  button {
+    padding: 8px 16px;
+    font-size: 14px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background-color: #e0e0e0;
+  }
+  button + button {
+    margin-left: 10px;
+  }
+  label {
+    display: block;
+    margin-bottom: 8px;
+  }
+  input[type="text"] {
+    padding: 6px;
+    font-size: 14px;
+    width: 100%;
+    margin-top: 4px;
+    margin-bottom: 12px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+  }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script>
+(function() {
+  const defaultColors = ['[BLACK]', '[BLUE]', '[GREEN]', '[RED]'];
+  let colors = defaultColors.slice();
+  let colorsConfirmed = false;
+  let coil1 = ['', ''];
+  let coil2 = ['', ''];
+  let initialRun = true;
+  let attempt = 0;
+  let testIndex = 1;
+
+  function reset() {
+    colors = defaultColors.slice();
+    colorsConfirmed = false;
+    coil1 = ['', ''];
+    coil2 = ['', ''];
+    attempt = 0;
+    testIndex = 1;
+  }
+
+  function render() {
+    const app = document.getElementById('app');
+    app.innerHTML = '';
+    const container = document.createElement('div');
+    app.appendChild(container);
+
+    if (!colorsConfirmed) {
+      renderColorPrompt(container);
+    } else if (coil1[1] === '') {
+      renderCoilTest(container);
+    } else {
+      renderResults(container);
+    }
+  }
+
+  function renderColorPrompt(container) {
+    const header = document.createElement('h2');
+    header.textContent = initialRun ? 'Welcome to the 2-phase bipolar stepper motor coil identification helper.' : 'To test another stepper motor';
+    container.appendChild(header);
+
+    const p1 = document.createElement('p');
+    p1.textContent = 'We need the 4 wire colors.';
+    container.appendChild(p1);
+
+    const p2 = document.createElement('p');
+    p2.textContent = 'Use default colors: ' + defaultColors.join(' ') + ' (order doesn\'t matter).';
+    container.appendChild(p2);
+
+    const buttonContainer = document.createElement('div');
+    const confirmBtn = document.createElement('button');
+    confirmBtn.textContent = 'Confirm';
+    confirmBtn.onclick = function() {
+      colors = defaultColors.slice();
+      colorsConfirmed = true;
+      coil1 = ['', ''];
+      coil2 = ['', ''];
+      testIndex = 1;
+      render();
+    };
+
+    const setBtn = document.createElement('button');
+    setBtn.textContent = 'Set Colors';
+    setBtn.onclick = function() {
+      showSetColorsForm();
+    };
+
+    buttonContainer.appendChild(confirmBtn);
+    buttonContainer.appendChild(setBtn);
+    container.appendChild(buttonContainer);
+  }
+
+  function showSetColorsForm() {
+    const app = document.getElementById('app');
+    app.innerHTML = '';
+    const container = document.createElement('div');
+    app.appendChild(container);
+
+    const h = document.createElement('h3');
+    h.textContent = 'Enter 4 unique wire colors (words only, no spaces).';
+    container.appendChild(h);
+
+    const errorP = document.createElement('p');
+    errorP.style.color = 'red';
+    container.appendChild(errorP);
+
+    const inputs = [];
+    for (let i = 0; i < 4; i++) {
+      const label = document.createElement('label');
+      label.textContent = 'Color ' + (i + 1) + ':';
+      const input = document.createElement('input');
+      input.type = 'text';
+      label.appendChild(input);
+      container.appendChild(label);
+      inputs.push(input);
+    }
+
+    const submitBtn = document.createElement('button');
+    submitBtn.textContent = 'Submit Colors';
+    submitBtn.onclick = function() {
+      const arr = [];
+      for (let i = 0; i < inputs.length; i++) {
+        let val = inputs[i].value.trim();
+        if (val === '') {
+          errorP.textContent = 'Please enter all 4 colors.';
+          return;
+        }
+        // convert to uppercase and wrap in brackets
+        let upper = '';
+        for (let c of val) {
+          upper += c.toUpperCase();
+        }
+        arr.push('[' + upper + ']');
+      }
+      // check duplicates
+      for (let i = 0; i < arr.length; i++) {
+        for (let j = i + 1; j < arr.length; j++) {
+          if (arr[i] === arr[j]) {
+            errorP.textContent = arr[i] + ' has already been entered. Each color must be unique.';
+            return;
+          }
+        }
+      }
+      colors = arr;
+      colorsConfirmed = true;
+      coil1 = ['', ''];
+      coil2 = ['', ''];
+      testIndex = 1;
+      render();
+    };
+    container.appendChild(submitBtn);
+
+    const backBtn = document.createElement('button');
+    backBtn.textContent = 'Back';
+    backBtn.onclick = function() {
+      render();
+    };
+    container.appendChild(backBtn);
+  }
+
+  function renderCoilTest(container) {
+    const p = document.createElement('p');
+    if (attempt === 0 && testIndex === 1) {
+      p.textContent = 'Set your multimeter to continuity mode.';
+      container.appendChild(p);
+    }
+
+    if (testIndex <= 3) {
+      const q = document.createElement('p');
+      q.textContent = 'Check for continuity between ' + colors[0] + ' and ' + colors[testIndex] + '. Are they continuous?';
+      container.appendChild(q);
+
+      const yesBtn = document.createElement('button');
+      yesBtn.textContent = 'Confirm';
+      yesBtn.onclick = function() {
+        coil1[0] = colors[0];
+        coil1[1] = colors[testIndex];
+        const others = [];
+        for (let i = 1; i < colors.length; i++) {
+          if (colors[i] !== coil1[1]) {
+            others.push(colors[i]);
+          }
+        }
+        coil2[0] = others[0];
+        coil2[1] = others[1];
+        render();
+      };
+      const noBtn = document.createElement('button');
+      noBtn.textContent = 'Continue testing';
+      noBtn.onclick = function() {
+        testIndex += 1;
+        render();
+      };
+      container.appendChild(yesBtn);
+      container.appendChild(noBtn);
+    } else {
+      const msg = document.createElement('p');
+      if (attempt < 3) {
+        msg.textContent = 'Are you sure? ' + colors[0] + ' has got to be continuous with one of the other 3 wires. Check your multimeter setting and your wire-to-motor connections.';
+      } else {
+        msg.textContent = 'You have tried ' + attempt + ' times. If you are sure that no continuity exists, your motor or wires might be broken. Check your wires\' integrity and their connections to the motor.';
+      }
+      container.appendChild(msg);
+
+      const testAgainBtn = document.createElement('button');
+      testAgainBtn.textContent = 'Test again';
+      testAgainBtn.onclick = function() {
+        attempt += 1;
+        coil1 = ['', ''];
+        coil2 = ['', ''];
+        testIndex = 1;
+        render();
+      };
+      const tryAnotherBtn = document.createElement('button');
+      tryAnotherBtn.textContent = 'Try another stepper';
+      tryAnotherBtn.onclick = function() {
+        reset();
+        initialRun = false;
+        render();
+      };
+      container.appendChild(testAgainBtn);
+      container.appendChild(tryAnotherBtn);
+    }
+  }
+
+  function renderResults(container) {
+    const h = document.createElement('h3');
+    h.textContent = 'Congrats! You\'ve found the wire pairings for the stepper:';
+    container.appendChild(h);
+    const c1 = document.createElement('p');
+    c1.textContent = 'Coil 1: ' + coil1[0] + ' ' + coil1[1];
+    container.appendChild(c1);
+    const c2 = document.createElement('p');
+    c2.textContent = 'Coil 2: ' + coil2[0] + ' ' + coil2[1];
+    container.appendChild(c2);
+    const btn = document.createElement('button');
+    btn.textContent = 'Test another stepper';
+    btn.onclick = function() {
+      reset();
+      initialRun = false;
+      render();
+    };
+    container.appendChild(btn);
+  }
+
+  document.addEventListener('DOMContentLoaded', function() {
+    render();
+  });
+})();
+</script>
+</body>
+</html>
