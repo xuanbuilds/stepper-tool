@@ -28,6 +28,7 @@
     color: #fff;
     transition: opacity 0.2s;
     margin-bottom: 10px;
+    text-transform: lowercase;
   }
   button:hover {
     opacity: 0.8;
@@ -106,7 +107,7 @@
 
     const buttonContainer = document.createElement('div');
     const confirmBtn = document.createElement('button');
-    confirmBtn.textContent = 'Confirm';
+    confirmBtn.textContent = 'confirm';
     confirmBtn.onclick = function() {
       colors = defaultColors.slice();
       colorsConfirmed = true;
@@ -117,7 +118,7 @@
     };
 
     const setBtn = document.createElement('button');
-    setBtn.textContent = 'Set Colors';
+    setBtn.textContent = 'set colors';
     setBtn.onclick = function() {
       showSetColorsForm();
     };
@@ -153,7 +154,7 @@
     }
 
     const submitBtn = document.createElement('button');
-    submitBtn.textContent = 'Submit Colors';
+    submitBtn.textContent = 'submit colors';
     submitBtn.onclick = function() {
       const arr = [];
       for (let i = 0; i < inputs.length; i++) {
@@ -188,7 +189,7 @@
     container.appendChild(submitBtn);
 
     const backBtn = document.createElement('button');
-    backBtn.textContent = 'Back';
+    backBtn.textContent = 'back';
     backBtn.onclick = function() {
       render();
     };
@@ -208,7 +209,7 @@
       container.appendChild(q);
 
       const yesBtn = document.createElement('button');
-      yesBtn.textContent = 'Confirm';
+      yesBtn.textContent = 'confirm';
       yesBtn.onclick = function() {
         coil1[0] = colors[0];
         coil1[1] = colors[testIndex];
@@ -223,7 +224,7 @@
         render();
       };
       const noBtn = document.createElement('button');
-      noBtn.textContent = 'Continue testing';
+      noBtn.textContent = 'continue testing';
       noBtn.onclick = function() {
         testIndex += 1;
         render();
@@ -240,7 +241,7 @@
       container.appendChild(msg);
 
       const testAgainBtn = document.createElement('button');
-      testAgainBtn.textContent = 'Test again';
+      testAgainBtn.textContent = 'test again';
       testAgainBtn.onclick = function() {
         attempt += 1;
         coil1 = ['', ''];
@@ -249,7 +250,7 @@
         render();
       };
       const tryAnotherBtn = document.createElement('button');
-      tryAnotherBtn.textContent = 'Try another stepper';
+      tryAnotherBtn.textContent = 'try another stepper';
       tryAnotherBtn.onclick = function() {
         reset();
         initialRun = false;
@@ -271,7 +272,7 @@
     c2.textContent = 'Coil 2: ' + coil2[0] + ' ' + coil2[1];
     container.appendChild(c2);
     const btn = document.createElement('button');
-    btn.textContent = 'Test another stepper';
+    btn.textContent = 'test another stepper';
     btn.onclick = function() {
       reset();
       initialRun = false;
