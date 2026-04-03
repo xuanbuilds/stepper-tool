@@ -102,12 +102,12 @@
     container.appendChild(p1);
 
     const p2 = document.createElement('p');
-    p2.textContent = 'Use default colors: ' + defaultColors.join(' ') + ' (order doesn\'t matter).';
+    p2.textContent = 'Default colors (order doesn\'t matter): ' + defaultColors.join(' ');
     container.appendChild(p2);
 
     const buttonContainer = document.createElement('div');
     const confirmBtn = document.createElement('button');
-    confirmBtn.textContent = 'confirm';
+    confirmBtn.textContent = 'use default';
     confirmBtn.onclick = function() {
       colors = defaultColors.slice();
       colorsConfirmed = true;
