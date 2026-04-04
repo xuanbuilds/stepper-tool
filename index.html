@@ -11,30 +11,30 @@
     color: #333;
     margin: 0;
     padding: 20px;
-    font-size: 18px; /* Increased from default */
-    text-align: left; /* Explicit left alignment */
-  }
-  #app {
-    max-width: 800px; /* Slightly wider for larger text */
-    margin: 0; /* Align container to the left */
-    background-color: #fff;
-  }
-  h2 {
-    font-size: 24px;
-    margin-bottom: 15px;
-  }
-  h3 {
-    font-size: 20px;
-    margin-bottom: 12px;
-  }
-  p {
-    margin-bottom: 15px;
+    font-size: 18px; /* Uniform font size */
+    text-align: left;
     line-height: 1.5;
   }
+  #app {
+    max-width: 800px;
+    margin: 0;
+    background-color: #fff;
+  }
+  h2, h3 {
+    font-size: 18px; /* Same as body */
+    font-weight: bold; /* Use bold for headers */
+    margin: 0 0 15px 0;
+  }
+  p {
+    margin: 0 0 15px 0;
+  }
+  .bold {
+    font-weight: bold;
+  }
   button {
-    padding: 12px 28px; /* Slightly larger padding */
-    font-size: 16px; /* Increased from 14px */
-    font-weight: 600;
+    padding: 10px 24px;
+    font-size: 18px; /* Same as body */
+    font-weight: normal; /* Minimal look */
     cursor: pointer;
     border: none;
     border-radius: 50px;
@@ -55,8 +55,8 @@
     margin-bottom: 10px;
   }
   input[type="text"] {
-    padding: 12px;
-    font-size: 16px;
+    padding: 10px;
+    font-size: 18px; /* Same as body */
     width: 100%;
     max-width: 400px;
     box-sizing: border-box;
@@ -64,9 +64,6 @@
     margin-bottom: 15px;
     border: 1px solid #ccc;
     border-radius: 8px;
-  }
-  h2, h3, p {
-    margin-top: 0;
   }
 </style>
 </head>
@@ -117,7 +114,7 @@
     container.appendChild(p1);
 
     const p2 = document.createElement('p');
-    p2.textContent = 'Default colors (order doesn\'t matter): ' + defaultColors.join(' ');
+    p2.innerHTML = '<span class="bold">Default colors (order doesn\'t matter):</span> ' + defaultColors.join(' ');
     container.appendChild(p2);
 
     const buttonContainer = document.createElement('div');
@@ -178,14 +175,12 @@
           errorP.textContent = 'Please enter all 4 colors.';
           return;
         }
-        // convert to uppercase and wrap in brackets
         let upper = '';
         for (let c of val) {
           upper += c.toUpperCase();
         }
         arr.push('[' + upper + ']');
       }
-      // check duplicates
       for (let i = 0; i < arr.length; i++) {
         for (let j = i + 1; j < arr.length; j++) {
           if (arr[i] === arr[j]) {
@@ -214,13 +209,13 @@
   function renderCoilTest(container) {
     const p = document.createElement('p');
     if (attempt === 0 && testIndex === 1) {
-      p.textContent = 'Set your multimeter to continuity mode.';
+      p.innerHTML = '<span class="bold">Set your multimeter to continuity mode.</span>';
       container.appendChild(p);
     }
 
     if (testIndex <= 3) {
       const q = document.createElement('p');
-      q.textContent = 'Check for continuity between ' + colors[0] + ' and ' + colors[testIndex] + '. Are they continuous?';
+      q.innerHTML = 'Check for continuity between <span class="bold">' + colors[0] + '</span> and <span class="bold">' + colors[testIndex] + '</span>. Are they continuous?';
       container.appendChild(q);
 
       const yesBtn = document.createElement('button');
@@ -281,10 +276,10 @@
     h.textContent = 'Congrats! You\'ve found the wire pairings for the stepper:';
     container.appendChild(h);
     const c1 = document.createElement('p');
-    c1.textContent = 'Coil 1: ' + coil1[0] + ' ' + coil1[1];
+    c1.innerHTML = '<span class="bold">Coil 1:</span> ' + coil1[0] + ' ' + coil1[1];
     container.appendChild(c1);
     const c2 = document.createElement('p');
-    c2.textContent = 'Coil 2: ' + coil2[0] + ' ' + coil2[1];
+    c2.innerHTML = '<span class="bold">Coil 2:</span> ' + coil2[0] + ' ' + coil2[1];
     container.appendChild(c2);
     const btn = document.createElement('button');
     btn.textContent = 'test another stepper';
