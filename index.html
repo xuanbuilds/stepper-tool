@@ -11,62 +11,62 @@
     color: #000; /* Pure black text */
     margin: 0;
     padding: 20px;
-    font-size: 18px; /* Uniform font size */
+    font-size: 24px; /* Global font size increased to 24px */
     text-align: left;
     line-height: 1.5;
   }
   #app {
-    max-width: 800px;
+    max-width: 1000px; /* Wider for larger text */
     margin: 0;
     background-color: #fff;
   }
   h2, h3 {
-    font-size: 18px; /* Same as body */
-    font-weight: normal; /* No bold for headers */
-    margin: 0 0 15px 0;
+    font-size: 24px; /* Same as body */
+    font-weight: normal;
+    margin: 0 0 20px 0;
     color: #000;
   }
   p {
-    margin: 0 0 15px 0;
+    margin: 0 0 20px 0;
     color: #000;
   }
   .bold-tag {
-    font-weight: bold; /* Bold only for color tags */
+    font-weight: bold;
   }
   button {
-    padding: 10px 24px;
-    font-size: 18px; /* Same as body */
-    font-weight: bold; /* Bold for buttons */
+    padding: 12px 32px;
+    font-size: 24px; /* Same as body */
+    font-weight: bold;
     cursor: pointer;
     border: none;
-    border-radius: 50px;
+    border-radius: 60px;
     background-color: #000;
     color: #fff;
     transition: opacity 0.2s;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     text-transform: lowercase;
   }
   button:hover {
     opacity: 0.8;
   }
   button + button {
-    margin-left: 10px;
+    margin-left: 15px;
   }
   label {
     display: block;
-    margin-bottom: 10px;
+    margin-bottom: 15px;
     color: #000;
   }
   input[type="text"] {
-    padding: 10px;
-    font-size: 18px; /* Same as body */
+    padding: 12px;
+    font-size: 24px; /* Same as body */
     width: 100%;
-    max-width: 400px;
+    max-width: 500px;
     box-sizing: border-box;
-    margin-top: 6px;
-    margin-bottom: 15px;
-    border: 1px solid #000; /* Black border for consistency */
-    border-radius: 8px;
+    margin-top: 8px;
+    margin-bottom: 20px;
+    border: 2px solid #000;
+    border-radius: 10px;
     color: #000;
   }
 </style>
@@ -109,18 +109,15 @@
   }
 
   function wrapTags(text) {
-    // Wrap bracketed tags in bold span
     return text.replace(/(\[[A-Z0-9]+\])/g, '<span class="bold-tag">$1</span>');
   }
 
   function renderColorPrompt(container) {
     const header = document.createElement('h2');
-    header.textContent = initialRun ? 'Welcome to the 2-phase bipolar stepper motor coil identification helper.' : 'To test another stepper motor';
+    header.textContent = initialRun 
+      ? 'Welcome to the 2-phase bipolar stepper motor coil identification helper, we need the 4 wire colors.' 
+      : 'To test another stepper motor, we need the 4 wire colors.';
     container.appendChild(header);
-
-    const p1 = document.createElement('p');
-    p1.textContent = 'We need the 4 wire colors.';
-    container.appendChild(p1);
 
     const p2 = document.createElement('p');
     p2.innerHTML = 'Default colors (order doesn\'t matter): ' + wrapTags(defaultColors.join(' '));
