@@ -11,12 +11,13 @@
     color: #000; /* Pure black text */
     margin: 0;
     padding: 20px;
-    font-size: 24px; /* Global font size increased to 24px */
+    font-size: 24px; /* Global font size 24px */
     text-align: left;
-    line-height: 1.5;
+    line-height: 1.4;
   }
   #app {
-    max-width: 1000px; /* Wider for larger text */
+    width: 100%; /* Flexible width to prevent wrapping */
+    max-width: 1200px; /* Increased max-width */
     margin: 0;
     background-color: #fff;
   }
@@ -25,6 +26,7 @@
     font-weight: normal;
     margin: 0 0 20px 0;
     color: #000;
+    white-space: normal; /* Allow natural wrapping if needed but with more space */
   }
   p {
     margin: 0 0 20px 0;
@@ -45,6 +47,7 @@
     transition: opacity 0.2s;
     margin-bottom: 15px;
     text-transform: lowercase;
+    white-space: nowrap; /* Prevent button text from wrapping */
   }
   button:hover {
     opacity: 0.8;
