@@ -8,7 +8,7 @@
   body {
     font-family: Arial, sans-serif;
     background-color: #fff;
-    color: #333;
+    color: #000; /* Pure black text */
     margin: 0;
     padding: 20px;
     font-size: 18px; /* Uniform font size */
@@ -22,19 +22,21 @@
   }
   h2, h3 {
     font-size: 18px; /* Same as body */
-    font-weight: bold; /* Use bold for headers */
+    font-weight: normal; /* No bold for headers */
     margin: 0 0 15px 0;
+    color: #000;
   }
   p {
     margin: 0 0 15px 0;
+    color: #000;
   }
-  .bold {
-    font-weight: bold;
+  .bold-tag {
+    font-weight: bold; /* Bold only for color tags */
   }
   button {
     padding: 10px 24px;
     font-size: 18px; /* Same as body */
-    font-weight: normal; /* Minimal look */
+    font-weight: bold; /* Bold for buttons */
     cursor: pointer;
     border: none;
     border-radius: 50px;
@@ -53,6 +55,7 @@
   label {
     display: block;
     margin-bottom: 10px;
+    color: #000;
   }
   input[type="text"] {
     padding: 10px;
@@ -62,8 +65,9 @@
     box-sizing: border-box;
     margin-top: 6px;
     margin-bottom: 15px;
-    border: 1px solid #ccc;
+    border: 1px solid #000; /* Black border for consistency */
     border-radius: 8px;
+    color: #000;
   }
 </style>
 </head>
@@ -104,6 +108,11 @@
     }
   }
 
+  function wrapTags(text) {
+    // Wrap bracketed tags in bold span
+    return text.replace(/(\[[A-Z0-9]+\])/g, '<span class="bold-tag">$1</span>');
+  }
+
   function renderColorPrompt(container) {
     const header = document.createElement('h2');
     header.textContent = initialRun ? 'Welcome to the 2-phase bipolar stepper motor coil identification helper.' : 'To test another stepper motor';
@@ -114,7 +123,7 @@
     container.appendChild(p1);
 
     const p2 = document.createElement('p');
-    p2.innerHTML = '<span class="bold">Default colors (order doesn\'t matter):</span> ' + defaultColors.join(' ');
+    p2.innerHTML = 'Default colors (order doesn\'t matter): ' + wrapTags(defaultColors.join(' '));
     container.appendChild(p2);
 
     const buttonContainer = document.createElement('div');
@@ -209,13 +218,13 @@
   function renderCoilTest(container) {
     const p = document.createElement('p');
     if (attempt === 0 && testIndex === 1) {
-      p.innerHTML = '<span class="bold">Set your multimeter to continuity mode.</span>';
+      p.textContent = 'Set your multimeter to continuity mode.';
       container.appendChild(p);
     }
 
     if (testIndex <= 3) {
       const q = document.createElement('p');
-      q.innerHTML = 'Check for continuity between <span class="bold">' + colors[0] + '</span> and <span class="bold">' + colors[testIndex] + '</span>. Are they continuous?';
+      q.innerHTML = 'Check for continuity between ' + wrapTags(colors[0]) + ' and ' + wrapTags(colors[testIndex]) + '. Are they continuous?';
       container.appendChild(q);
 
       const yesBtn = document.createElement('button');
@@ -276,10 +285,10 @@
     h.textContent = 'Congrats! You\'ve found the wire pairings for the stepper:';
     container.appendChild(h);
     const c1 = document.createElement('p');
-    c1.innerHTML = '<span class="bold">Coil 1:</span> ' + coil1[0] + ' ' + coil1[1];
+    c1.innerHTML = 'Coil 1: ' + wrapTags(coil1[0]) + ' ' + wrapTags(coil1[1]);
     container.appendChild(c1);
     const c2 = document.createElement('p');
-    c2.innerHTML = '<span class="bold">Coil 2:</span> ' + coil2[0] + ' ' + coil2[1];
+    c2.innerHTML = 'Coil 2: ' + wrapTags(coil2[0]) + ' ' + wrapTags(coil2[1]);
     container.appendChild(c2);
     const btn = document.createElement('button');
     btn.textContent = 'test another stepper';
