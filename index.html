@@ -16,17 +16,16 @@
     line-height: 1.4;
   }
   #app {
-    width: 100%; /* Flexible width to prevent wrapping */
-    max-width: 1200px; /* Increased max-width */
+    width: 100%;
+    max-width: 1200px;
     margin: 0;
     background-color: #fff;
   }
   h2, h3 {
-    font-size: 24px; /* Same as body */
+    font-size: 24px;
     font-weight: normal;
     margin: 0 0 20px 0;
     color: #000;
-    white-space: normal; /* Allow natural wrapping if needed but with more space */
   }
   p {
     margin: 0 0 20px 0;
@@ -35,9 +34,12 @@
   .bold-tag {
     font-weight: bold;
   }
+  .button-container {
+    margin-top: 40px; /* Doubled space between text and buttons */
+  }
   button {
     padding: 12px 32px;
-    font-size: 24px; /* Same as body */
+    font-size: 24px;
     font-weight: bold;
     cursor: pointer;
     border: none;
@@ -47,7 +49,7 @@
     transition: opacity 0.2s;
     margin-bottom: 15px;
     text-transform: lowercase;
-    white-space: nowrap; /* Prevent button text from wrapping */
+    white-space: nowrap;
   }
   button:hover {
     opacity: 0.8;
@@ -62,7 +64,7 @@
   }
   input[type="text"] {
     padding: 12px;
-    font-size: 24px; /* Same as body */
+    font-size: 24px;
     width: 100%;
     max-width: 500px;
     box-sizing: border-box;
@@ -118,15 +120,20 @@
   function renderColorPrompt(container) {
     const header = document.createElement('h2');
     header.textContent = initialRun 
-      ? 'Welcome to the 2-phase bipolar stepper motor coil identification helper, we need the 4 wire colors.' 
-      : 'To test another stepper motor, we need the 4 wire colors.';
+      ? 'Welcome to the 2-phase bipolar stepper motor coil identification helper.' 
+      : 'To test another stepper motor.';
     container.appendChild(header);
+
+    const p1 = document.createElement('p');
+    p1.textContent = 'We need the 4 wire colors.';
+    container.appendChild(p1);
 
     const p2 = document.createElement('p');
     p2.innerHTML = 'Default colors (order doesn\'t matter): ' + wrapTags(defaultColors.join(' '));
     container.appendChild(p2);
 
     const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'button-container';
     const confirmBtn = document.createElement('button');
     confirmBtn.textContent = 'use default';
     confirmBtn.onclick = function() {
@@ -174,6 +181,8 @@
       inputs.push(input);
     }
 
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'button-container';
     const submitBtn = document.createElement('button');
     submitBtn.textContent = 'submit colors';
     submitBtn.onclick = function() {
@@ -205,14 +214,15 @@
       testIndex = 1;
       render();
     };
-    container.appendChild(submitBtn);
+    buttonContainer.appendChild(submitBtn);
 
     const backBtn = document.createElement('button');
     backBtn.textContent = 'back';
     backBtn.onclick = function() {
       render();
     };
-    container.appendChild(backBtn);
+    buttonContainer.appendChild(backBtn);
+    container.appendChild(buttonContainer);
   }
 
   function renderCoilTest(container) {
@@ -227,6 +237,8 @@
       q.innerHTML = 'Check for continuity between ' + wrapTags(colors[0]) + ' and ' + wrapTags(colors[testIndex]) + '. Are they continuous?';
       container.appendChild(q);
 
+      const buttonContainer = document.createElement('div');
+      buttonContainer.className = 'button-container';
       const yesBtn = document.createElement('button');
       yesBtn.textContent = 'confirm';
       yesBtn.onclick = function() {
@@ -248,8 +260,9 @@
         testIndex += 1;
         render();
       };
-      container.appendChild(yesBtn);
-      container.appendChild(noBtn);
+      buttonContainer.appendChild(yesBtn);
+      buttonContainer.appendChild(noBtn);
+      container.appendChild(buttonContainer);
     } else {
       const msg = document.createElement('p');
       if (attempt < 3) {
@@ -259,6 +272,8 @@
       }
       container.appendChild(msg);
 
+      const buttonContainer = document.createElement('div');
+      buttonContainer.className = 'button-container';
       const testAgainBtn = document.createElement('button');
       testAgainBtn.textContent = 'test again';
       testAgainBtn.onclick = function() {
@@ -275,8 +290,9 @@
         initialRun = false;
         render();
       };
-      container.appendChild(testAgainBtn);
-      container.appendChild(tryAnotherBtn);
+      buttonContainer.appendChild(testAgainBtn);
+      buttonContainer.appendChild(tryAnotherBtn);
+      container.appendChild(buttonContainer);
     }
   }
 
@@ -290,6 +306,9 @@
     const c2 = document.createElement('p');
     c2.innerHTML = 'Coil 2: ' + wrapTags(coil2[0]) + ' ' + wrapTags(coil2[1]);
     container.appendChild(c2);
+    
+    const buttonContainer = document.createElement('div');
+    buttonContainer.className = 'button-container';
     const btn = document.createElement('button');
     btn.textContent = 'test another stepper';
     btn.onclick = function() {
@@ -297,7 +316,8 @@
       initialRun = false;
       render();
     };
-    container.appendChild(btn);
+    buttonContainer.appendChild(btn);
+    container.appendChild(buttonContainer);
   }
 
   document.addEventListener('DOMContentLoaded', function() {
