@@ -266,9 +266,9 @@
     } else {
       const msg = document.createElement('p');
       if (attempt < 3) {
-        msg.textContent = 'Are you sure? ' + colors[0] + ' has got to be continuous with one of the other 3 wires. Check your multimeter setting and your wire-to-motor connections.';
+        msg.innerHTML = 'Are you sure? ' + wrapTags(colors[0]) + ' has got to be continuous with one of the other 3 wires.<br>Check your multimeter setting and your wire-to-motor connections.';
       } else {
-        msg.textContent = 'You have tried ' + attempt + ' times. If you are sure that no continuity exists, your motor or wires might be broken. Check your wires\' integrity and their connections to the motor.';
+        msg.innerHTML = 'You have tried ' + attempt + ' times. If you are sure that no continuity exists, your motor or wires might be broken.<br>Check your wires\' integrity and their connections to the motor.';
       }
       container.appendChild(msg);
 
